@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven3'
+    }
 
     environment {
         IMAGE_NAME = "local-jenkins-app"
@@ -7,7 +10,7 @@ pipeline {
         SONAR_PROJECT_KEY = "project8"
         SONAR_HOST_URL = "http://localhost:9000"
     }
-    
+
     stages {
 
         stage('Checkout Code') {
