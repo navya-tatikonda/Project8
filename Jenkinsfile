@@ -7,7 +7,10 @@ pipeline {
         SONAR_PROJECT_KEY = "project8"
         SONAR_HOST_URL = "http://localhost:9000"
     }
-
+    
+    tools {
+        sonarScanner 'SonarScanner'
+    }
 
     stages {
 
@@ -17,6 +20,11 @@ pipeline {
                     url: 'https://github.com/navya-tatikonda/Project8.git'
             }
         }
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        } 
 
         stage('SonarQube Code Analysis') {
             steps {
