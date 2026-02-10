@@ -22,7 +22,7 @@ pipeline {
 
         stage('SonarQube Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                 sh '''
                 /opt/homebrew/bin/sonar-scanner \
                     -Dsonar.projectKey=project8 \
