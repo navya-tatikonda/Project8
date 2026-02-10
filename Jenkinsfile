@@ -23,13 +23,11 @@ pipeline {
         stage('SonarQube Code Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-                      -Dsonar.sources=. \
-                      -Dsonar.language=java \
-                      -Dsonar.java.binaries=target
-                    '''
+                sh '''
+                sonar-scanner \
+                    -Dsonar.projectKey=project8 \
+                    -Dsonar.sources=.
+                '''
                 }
             }
         }
