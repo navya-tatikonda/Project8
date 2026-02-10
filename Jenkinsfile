@@ -4,12 +4,10 @@ pipeline {
     environment {
         IMAGE_NAME = "local-jenkins-app"
         CONTAINER_NAME = "jenkins_app_container"
-        SONAR_PROJECT_KEY = "local-docker-poc"
+        SONAR_PROJECT_KEY = "project8"
+        SONAR_HOST_URL = "http://localhost:9000"
     }
 
-    tools {
-        sonarQubeScanner 'SonarScanner'
-    }
 
     stages {
 
