@@ -7,9 +7,9 @@ pipeline {
         SONAR_PROJECT_KEY = "project8"
         SONAR_HOST_URL = "http://localhost:9000"
     }
-    
+
     tools {
-        sonarScanner 'SonarScanner'
+        sonarRunner 'SonarScanner'
     }
 
     stages {
