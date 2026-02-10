@@ -1,14 +1,13 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven3'
-    }
 
     environment {
         IMAGE_NAME = "local-jenkins-app"
         CONTAINER_NAME = "jenkins_app_container"
         SONAR_PROJECT_KEY = "project8"
         SONAR_HOST_URL = "http://localhost:9000"
+        DOCKER_PATH = "/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin:/opt/homebrew/bin"
+        PATH = "${DOCKER_PATH}:${env.PATH}"
     }
 
     stages {
