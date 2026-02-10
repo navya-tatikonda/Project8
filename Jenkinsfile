@@ -22,12 +22,14 @@ pipeline {
 
         stage('SonarQube Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                sh '''
-                /opt/homebrew/bin/sonar-scanner \
-                    -Dsonar.projectKey=project8 \
-                    -Dsonar.sources=.
-                '''
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                    /opt/homebrew/bin/sonar-scanner \
+                        -Dsonar.projectKey=project8 \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
                 }
             }
         }
