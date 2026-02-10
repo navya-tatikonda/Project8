@@ -24,7 +24,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                 sh '''
-                sonar-scanner \
+                /opt/homebrew/bin/sonar-scanner \
                     -Dsonar.projectKey=project8 \
                     -Dsonar.sources=.
                 '''
