@@ -1,22 +1,34 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "local-jenkins-app"
+        CONTAINER_NAME = "jenkins_app_container"
+        SONAR_PROJECT_KEY = "local-docker-poc"
+    }
+
+    tools {
+        sonarQubeScanner 'SonarScanner'
+    }
+
     stages {
 
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/navya-tatikonda/Project8.git'
+                    url: 'https://github.com/navya-tatikonda/Project8.git'
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Code Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
-                      sonar-scanner \
-                      -Dsonar.projectKey=cicd-poc \
-                      -Dsonar.sources=.
+                    sonar-scanner \
+                      -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+                      -Dsonar.sources=. \
+                      -Dsonar.language=java \
+                      -Dsonar.java.binaries=target
                     '''
                 }
             }
@@ -24,17 +36,39 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t cicd-poc:latest .'
+                sh '''
+                docker build -t $IMAGE_NAME .
+                '''
             }
         }
 
-        stage('Deploy Application') {
+        stage('Stop Old Container') {
             steps {
                 sh '''
-                  docker rm -f cicd-app || true
-                  docker run -d -p 8081:80 --name cicd-app cicd-poc:latest
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
                 '''
             }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh '''
+                docker run -d \
+                  --name $CONTAINER_NAME \
+                  -p 8081:8080 \
+                  $IMAGE_NAME
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "SonarQube analysis + deployment successful "
+        }
+        failure {
+            echo "Pipeline failed "
         }
     }
 }
