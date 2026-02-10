@@ -36,10 +36,14 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                /usr/local/bin/docker build -t $IMAGE_NAME .
-                '''
-            }
+                withEnv([
+                    "PATH=/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
+                ]) {
+                   sh '''
+                   /usr/local/bin/docker build -t $IMAGE_NAME .
+                   '''
+                }
+           }
         }
 
         stage('Stop Old Container') {
